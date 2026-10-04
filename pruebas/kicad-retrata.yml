@@ -1,0 +1,8 @@
+# Configuración de prueba de kicad-retrata, usada por
+# .github/workflows/probar.yml. Las rutas son relativas a la raíz de este
+# repositorio.
+carpeta-imagenes: pruebas/docs/images
+modulos:
+  - nombre: proyecto-minimo
+    proyecto: pruebas/proyecto-minimo/proyecto-minimo
+    doc: pruebas/docs/proyecto-minimo.md

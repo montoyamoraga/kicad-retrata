@@ -1,0 +1,178 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "68fa8c53-53c0-434d-b949-217fb2c5d4dc")
+	(paper "A5")
+	(title_block (title "proyecto-minimo") (rev "rev-a") (company "piruetas"))
+	(lib_symbols
+(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "R"
+			(at 2.032 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 0 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -1.778 0 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "R res resistor"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	)
+	(symbol (lib_id "Device:R") (at 50.8 50.8 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "3d143aa2-1b98-449c-8696-9a5e0cebbb23")
+		(property "Reference" "R1" (at 53.339999999999996 50.8 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10k" (at 53.339999999999996 53.339999999999996 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 50.8 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 50.8 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 50.8 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "7342ea8c-6d65-45be-9bb3-ba723645f5d4")) (pin "2" (uuid "aafbb62b-eec4-407f-a9a8-ee25c3a7f1d9"))
+		(instances (project "proyecto-minimo" (path "/68fa8c53-53c0-434d-b949-217fb2c5d4dc" (reference "R1") (unit 1))))
+	)
+	(symbol (lib_id "Device:R") (at 63.5 50.8 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "2ffb0c92-b4ff-4122-aac4-ef01f4f6bf59")
+		(property "Reference" "R2" (at 66.04 50.8 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10k" (at 66.04 53.339999999999996 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 63.5 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 63.5 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 63.5 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "c30138aa-856f-40aa-a3f4-b59cffadcb3f")) (pin "2" (uuid "917faf19-b6f2-4875-bbba-46336037b19b"))
+		(instances (project "proyecto-minimo" (path "/68fa8c53-53c0-434d-b949-217fb2c5d4dc" (reference "R2") (unit 1))))
+	)
+	(symbol (lib_id "Device:R") (at 76.2 50.8 0) (unit 1) (in_bom yes) (on_board yes) (dnp no) (uuid "5fc0ec30-5a03-41b1-9b18-f54ff7c1280a")
+		(property "Reference" "R3" (at 78.74000000000001 50.8 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "100k" (at 78.74000000000001 53.339999999999996 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 76.2 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 76.2 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 76.2 50.8 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "8b338904-2ab2-48e8-a344-8a81e6f7c115")) (pin "2" (uuid "c9cbe74c-aa10-446e-8d0f-50c59660ee95"))
+		(instances (project "proyecto-minimo" (path "/68fa8c53-53c0-434d-b949-217fb2c5d4dc" (reference "R3") (unit 1))))
+	)
+	(sheet_instances (path "/" (page "1")))
+)
