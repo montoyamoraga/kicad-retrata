@@ -27,7 +27,7 @@ Nació en [popusintes-esquematicos-placas](https://github.com/piruetasxyz/popusi
        runs-on: ubuntu-latest
        steps:
          - uses: actions/checkout@v4
-         - uses: piruetasxyz/kicad-retrata@v1
+         - uses: piruetasxyz/kicad-retrata@v0
    ```
 
 3. Si el módulo tiene `doc`, poner en ese archivo las marcas donde va la tabla:
@@ -104,13 +104,13 @@ Ojo: las capturas generadas localmente pueden diferir un poco de las de GitHub A
 
 ## Versiones
 
-Se usa [versionado semántico](https://semver.org/lang/es/). Cada versión tiene su etiqueta (`v1.0.0`) y la etiqueta `v1` se mueve a la última versión `v1.x.x`:
+Se usa [versionado semántico](https://semver.org/lang/es/). Cada versión tiene su etiqueta (`v0.0.1`) y la etiqueta mayor (`v0`) se mueve a la última versión de esa serie, así los repositorios que usan `@v0` reciben los arreglos sin cambiar su workflow:
 
 ```bash
-git tag -a v1.0.0 -m "v1.0.0"
-git tag -f v1
-git push origin v1.0.0
-git push -f origin v1
+git tag -a v0.0.2 -m "v0.0.2"
+git tag -f v0
+git push origin v0.0.2
+git push -f origin v0
 ```
 
 ## Licencia

@@ -1,4 +1,5 @@
-# Configuración de kicad-retrata para piruetasxyz/popusintes-esquematicos-placas.
+# Ejemplo de configuración de kicad-retrata para un repositorio con un solo
+# producto. Copiarlo a la raíz del repositorio como kicad-retrata.yml.
 # Todas las rutas son relativas a la raíz del repositorio.
 
 # Dónde quedan las capturas: <carpeta-imagenes>/<nombre>-esquematico.svg y
@@ -13,7 +14,7 @@ capas-placa: [F.Cu, F.Mask, F.Silkscreen, Edge.Cuts]
 # que ya trae kicad-retrata (ver DESCRIPCIONES_BASE en retrata.py) y pueden
 # reemplazarlas.
 descripciones:
-  "easyeda2kicad:URA2412YMD-20WR3_C5369773": "Convertidor DC-DC aislado ±12V"
+  "Mi_Biblioteca:Mi_Componente": "Descripción en español"
 
 # Un módulo por entrada. "proyecto" es la ruta a la revisión activa, con o
 # sin extensión: se usan el .kicad_sch y el .kicad_pcb con ese nombre.
@@ -21,24 +22,9 @@ descripciones:
 # <!-- BOM_TABLE_START --> y <!-- BOM_TABLE_END --> de ese archivo.
 # "esquematico: false" o "placa: false" desactivan esa captura.
 modulos:
-  - nombre: ataconso
-    proyecto: ataconso/ataconso-v-0-rev-c/ataconso-v-0-rev-c
-    doc: docs/ataconso.md
-  - nombre: chufe
-    proyecto: chufe/chufe-v-0-rev-a/chufe-v-0-rev-a
-    doc: docs/chufe.md
-  - nombre: chufebu
-    proyecto: chufebu/chufebu-v-0-rev-a/chufebu-v-0-rev-a
-    doc: docs/chufebu.md
-  - nombre: diente
-    proyecto: diente/diente-v-0-rev-a/diente-v-0-rev-a
-    doc: docs/diente.md
-  - nombre: parla
-    proyecto: parla/parla-v-0-rev-c/parla-v-0-rev-c
-    doc: docs/parla.md
-  - nombre: relo
-    proyecto: relo/relo-v-0-rev-a/relo-v-0-rev-a
-    doc: docs/relo.md
-  - nombre: suma
-    proyecto: suma/suma-v-0-rev-a/suma-v-0-rev-a
-    doc: docs/suma.md
+  - nombre: mi-modulo
+    proyecto: hardware/mi-modulo-v-0-rev-a/mi-modulo-v-0-rev-a
+    doc: docs/index.md
+  # Un repositorio puede tener más de un módulo:
+  # - nombre: otro-modulo
+  #   proyecto: hardware/otro-modulo-v-0-rev-a/otro-modulo-v-0-rev-a
