@@ -1,0 +1,31 @@
+# Ejemplo de workflow que usa kicad-retrata. Copiarlo a
+# .github/workflows/retratar.yml del repositorio KiCad, junto con un
+# kicad-retrata.yml en la raíz (ver ejemplos/kicad-retrata.yml).
+name: Retratar esquemáticos y placas
+
+on:
+  push:
+    branches:
+      - main
+    # GitHub no puede leer las rutas desde kicad-retrata.yml, así que se
+    # escucha cualquier cambio de KiCad; si no cambia nada en las revisiones
+    # activas, kicad-retrata no hace commit.
+    paths:
+      - "**/*.kicad_sch"
+      - "**/*.kicad_pcb"
+      - "kicad-retrata.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  retratar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: piruetasxyz/kicad-retrata@v1
