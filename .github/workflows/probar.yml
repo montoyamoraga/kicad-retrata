@@ -1,0 +1,52 @@
+name: Probar kicad-retrata
+
+# Corre la acción contra piruetasxyz/popusintes-esquematicos-placas, sin
+# hacer commit, para verificar que sigue funcionando con proyectos reales.
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  probar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar kicad-retrata
+        uses: actions/checkout@v4
+        with:
+          path: kicad-retrata
+
+      - name: Clonar proyecto de prueba
+        uses: actions/checkout@v4
+        with:
+          repository: piruetasxyz/popusintes-esquematicos-placas
+          path: proyecto
+
+      # La acción trabaja sobre github.workspace, así que el proyecto de
+      # prueba se mueve ahí y la acción queda en una carpeta aparte.
+      - name: Preparar espacio de trabajo
+        run: |
+          set -eu
+          mv kicad-retrata "$RUNNER_TEMP/kicad-retrata"
+          shopt -s dotglob
+          mv proyecto/* .
+          rmdir proyecto
+          cp "$RUNNER_TEMP/kicad-retrata/ejemplos/kicad-retrata.yml" kicad-retrata.yml
+          mkdir -p .github/actions
+          mv "$RUNNER_TEMP/kicad-retrata" .github/actions/kicad-retrata
+
+      - name: Correr kicad-retrata
+        id: retrata
+        uses: ./.github/actions/kicad-retrata
+        with:
+          hacer-commit: "false"
+
+      - name: Mostrar resultado
+        run: |
+          echo "hubo-cambios: ${{ steps.retrata.outputs.hubo-cambios }}"
+          ls -l docs/images

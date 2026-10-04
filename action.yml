@@ -1,0 +1,96 @@
+name: kicad-retrata
+description: Capturas SVG de esquemáticos y placas, y tablas de Bill of materials, para proyectos KiCad.
+author: piruetas
+branding:
+  icon: camera
+  color: purple
+
+inputs:
+  configuracion:
+    description: Archivo de configuración, relativo a la raíz del repositorio.
+    default: kicad-retrata.yml
+  version-kicad:
+    description: Etiqueta de la imagen de Docker kicad/kicad a usar.
+    default: "10.0"
+  hacer-commit:
+    description: Si es "true", hace commit y push de los archivos generados cuando cambian.
+    default: "true"
+  mensaje-commit:
+    description: Mensaje del commit automático.
+    default: "Actualizar capturas y BOM de esquemáticos y placas [skip ci]"
+
+outputs:
+  hubo-cambios:
+    description: '"true" si alguna captura o BOM cambió respecto del último commit.'
+    value: ${{ steps.revisar.outputs.hubo-cambios }}
+
+runs:
+  using: composite
+  steps:
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Instalar dependencias de Python
+      shell: bash
+      run: python -m pip install --quiet --requirement "$GITHUB_ACTION_PATH/requirements.txt"
+
+    - name: Descargar KiCad ${{ inputs.version-kicad }}
+      shell: bash
+      env:
+        VERSION_KICAD: ${{ inputs.version-kicad }}
+      run: docker pull --quiet "kicad/kicad:${VERSION_KICAD}"
+
+    - name: Generar capturas y BOM
+      shell: bash
+      working-directory: ${{ github.workspace }}
+      env:
+        CONFIGURACION: ${{ inputs.configuracion }}
+        VERSION_KICAD: ${{ inputs.version-kicad }}
+      run: |
+        set -eu
+        # kicad-cli corre dentro de Docker con el repositorio montado en
+        # /work, por eso retrata.py le pasa solo rutas relativas. Se usa el
+        # usuario del runner para que los archivos generados no queden como
+        # propiedad de root.
+        export KICAD_CLI="docker run --rm --user $(id -u):$(id -g) -e HOME=/tmp -v ${PWD}:/work -w /work kicad/kicad:${VERSION_KICAD} kicad-cli"
+        python "$GITHUB_ACTION_PATH/retrata.py" \
+          --configuracion "$CONFIGURACION" \
+          --rutas "$RUNNER_TEMP/kicad-retrata-rutas.txt"
+
+    - name: Revisar cambios
+      id: revisar
+      shell: bash
+      working-directory: ${{ github.workspace }}
+      run: |
+        set -eu
+        git add --pathspec-from-file="$RUNNER_TEMP/kicad-retrata-rutas.txt"
+        if git diff --cached --quiet; then
+          echo "Sin cambios en las capturas ni la BOM."
+          echo "hubo-cambios=false" >> "$GITHUB_OUTPUT"
+        else
+          git diff --cached --stat
+          echo "hubo-cambios=true" >> "$GITHUB_OUTPUT"
+        fi
+        # Dejar el índice como estaba: el commit, si corresponde, lo hace el
+        # paso siguiente.
+        git reset --quiet
+
+    - name: Commit y push
+      if: inputs.hacer-commit == 'true' && steps.revisar.outputs.hubo-cambios == 'true'
+      shell: bash
+      working-directory: ${{ github.workspace }}
+      env:
+        MENSAJE: ${{ inputs.mensaje-commit }}
+      run: |
+        set -eu
+        if ! git symbolic-ref --quiet HEAD > /dev/null; then
+          echo "::warning::HEAD no está en una rama (¿pull request?), no se hace commit."
+          exit 0
+        fi
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add --pathspec-from-file="$RUNNER_TEMP/kicad-retrata-rutas.txt"
+        git commit --quiet --message "$MENSAJE"
+        git push

@@ -1,0 +1,44 @@
+# Configuración de kicad-retrata para piruetasxyz/popusintes-esquematicos-placas.
+# Todas las rutas son relativas a la raíz del repositorio.
+
+# Dónde quedan las capturas: <carpeta-imagenes>/<nombre>-esquematico.svg y
+# <carpeta-imagenes>/<nombre>-placa.svg.
+carpeta-imagenes: docs/images
+
+# Capas de la captura de la placa (opcional, este es el valor por defecto).
+# Cada módulo puede reemplazarlas con su propia clave "capas-placa".
+capas-placa: [F.Cu, F.Mask, F.Silkscreen, Edge.Cuts]
+
+# Descripciones en español para la tabla de BOM, por lib_id. Se suman a las
+# que ya trae kicad-retrata (ver DESCRIPCIONES_BASE en retrata.py) y pueden
+# reemplazarlas.
+descripciones:
+  "easyeda2kicad:URA2412YMD-20WR3_C5369773": "Convertidor DC-DC aislado ±12V"
+
+# Un módulo por entrada. "proyecto" es la ruta a la revisión activa, con o
+# sin extensión: se usan el .kicad_sch y el .kicad_pcb con ese nombre.
+# "doc" es opcional: si está, se regenera la tabla de BOM entre las marcas
+# <!-- BOM_TABLE_START --> y <!-- BOM_TABLE_END --> de ese archivo.
+# "esquematico: false" o "placa: false" desactivan esa captura.
+modulos:
+  - nombre: ataconso
+    proyecto: ataconso/ataconso-v-0-rev-c/ataconso-v-0-rev-c
+    doc: docs/ataconso.md
+  - nombre: chufe
+    proyecto: chufe/chufe-v-0-rev-a/chufe-v-0-rev-a
+    doc: docs/chufe.md
+  - nombre: chufebu
+    proyecto: chufebu/chufebu-v-0-rev-a/chufebu-v-0-rev-a
+    doc: docs/chufebu.md
+  - nombre: diente
+    proyecto: diente/diente-v-0-rev-a/diente-v-0-rev-a
+    doc: docs/diente.md
+  - nombre: parla
+    proyecto: parla/parla-v-0-rev-c/parla-v-0-rev-c
+    doc: docs/parla.md
+  - nombre: relo
+    proyecto: relo/relo-v-0-rev-a/relo-v-0-rev-a
+    doc: docs/relo.md
+  - nombre: suma
+    proyecto: suma/suma-v-0-rev-a/suma-v-0-rev-a
+    doc: docs/suma.md
