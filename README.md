@@ -1,1 +1,1 @@
-# kicad-capturas
+# kicad-retrata
