@@ -26,7 +26,7 @@ Nació en [popusintes-esquematicos-placas](https://github.com/piruetasxyz/popusi
      retratar:
        runs-on: ubuntu-latest
        steps:
-         - uses: actions/checkout@v4
+         - uses: actions/checkout@v7
          - uses: piruetasxyz/kicad-retrata@v0
    ```
 
@@ -104,13 +104,17 @@ Ojo: las capturas generadas localmente pueden diferir un poco de las de GitHub A
 
 ## Versiones
 
-Se usa [versionado semántico](https://semver.org/lang/es/). Cada versión tiene su etiqueta (`v0.0.1`) y la etiqueta mayor (`v0`) se mueve a la última versión de esa serie, así los repositorios que usan `@v0` reciben los arreglos sin cambiar su workflow:
+Se usa [versionado semántico](https://semver.org/lang/es/). Cada versión tiene su etiqueta (`v0.0.1`) y la etiqueta mayor (`v0`) se mueve a la última versión de esa serie, así los repositorios que usan `@v0` reciben los arreglos sin cambiar su workflow.
+
+Las etiquetas van en `piruetasxyz/kicad-retrata`, que es de donde los workflows usan la acción. En un clon de un fork, ese repositorio es el remoto `upstream` (`origin` es el fork), y la etiqueta se pone sobre `upstream/main`, después de mergear el pull request:
 
 ```bash
-git tag -a v0.0.2 -m "v0.0.2"
-git tag -f v0
-git push origin v0.0.2
-git push -f origin v0
+git fetch upstream --tags
+git tag -a v0.0.3 -m "v0.0.3" upstream/main
+git tag -f v0 v0.0.3
+git push upstream v0.0.3
+git push -f upstream v0
+gh release create v0.0.3 -R piruetasxyz/kicad-retrata --verify-tag --title v0.0.3 --notes "..."
 ```
 
 ## Licencia
