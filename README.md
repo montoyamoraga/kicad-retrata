@@ -26,7 +26,7 @@ Nació en [popusintes-esquematicos-placas](https://github.com/piruetasxyz/popusi
      retratar:
        runs-on: ubuntu-latest
        steps:
-         - uses: actions/checkout@v4
+         - uses: actions/checkout@v7
          - uses: piruetasxyz/kicad-retrata@v0
    ```
 
