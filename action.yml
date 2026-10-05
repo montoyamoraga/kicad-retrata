@@ -12,6 +12,13 @@ inputs:
   version-kicad:
     description: Etiqueta de la imagen de Docker kicad/kicad a usar.
     default: "10.0"
+  carpeta-fuentes:
+    description: >-
+      Carpeta del runner con fuentes (.otf, .ttf) que KiCad debe tener
+      instaladas, por ejemplo fuentes privadas escritas desde un secreto.
+      Conviene que esté fuera del repositorio (en $RUNNER_TEMP) para que no
+      termine en el commit. Vacía: solo las fuentes de la imagen de Docker.
+    default: ""
   hacer-commit:
     description: Si es "true", hace commit y push de los archivos generados cuando cambian.
     default: "true"
@@ -48,13 +55,24 @@ runs:
       env:
         CONFIGURACION: ${{ inputs.configuracion }}
         VERSION_KICAD: ${{ inputs.version-kicad }}
+        CARPETA_FUENTES: ${{ inputs.carpeta-fuentes }}
       run: |
         set -eu
         # kicad-cli corre dentro de Docker con el repositorio montado en
         # /work, por eso retrata.py le pasa solo rutas relativas. Se usa el
         # usuario del runner para que los archivos generados no queden como
         # propiedad de root.
-        export KICAD_CLI="docker run --rm --user $(id -u):$(id -g) -e HOME=/tmp -v ${PWD}:/work -w /work kicad/kicad:${VERSION_KICAD} kicad-cli"
+        # Con HOME=/tmp, fontconfig busca fuentes en /tmp/.local/share/fonts:
+        # ahí se monta la carpeta de fuentes, si hay una.
+        MONTAR_FUENTES=""
+        if [ -n "$CARPETA_FUENTES" ]; then
+          if [ ! -d "$CARPETA_FUENTES" ]; then
+            echo "::error::carpeta-fuentes no existe: $CARPETA_FUENTES"
+            exit 1
+          fi
+          MONTAR_FUENTES="-v $(realpath "$CARPETA_FUENTES"):/tmp/.local/share/fonts:ro"
+        fi
+        export KICAD_CLI="docker run --rm --user $(id -u):$(id -g) -e HOME=/tmp ${MONTAR_FUENTES} -v ${PWD}:/work -w /work kicad/kicad:${VERSION_KICAD} kicad-cli"
         python "$GITHUB_ACTION_PATH/retrata.py" \
           --configuracion "$CONFIGURACION" \
           --rutas "$RUNNER_TEMP/kicad-retrata-rutas.txt"

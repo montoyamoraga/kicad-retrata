@@ -76,6 +76,7 @@ Si aparece un componente sin descripción, la acción deja un aviso en el resume
 | --- | --- | --- |
 | `configuracion` | Archivo de configuración. | `kicad-retrata.yml` |
 | `version-kicad` | Etiqueta de la imagen de Docker [`kicad/kicad`](https://hub.docker.com/r/kicad/kicad). | `10.0` |
+| `carpeta-fuentes` | Carpeta del runner con fuentes que KiCad debe tener instaladas (ver [Fuentes privadas](#fuentes-privadas)). | — |
 | `hacer-commit` | `"false"` para solo generar los archivos, sin commit ni push. | `"true"` |
 | `mensaje-commit` | Mensaje del commit automático. | `Actualizar capturas y BOM de esquemáticos y placas [skip ci]` |
 
@@ -88,6 +89,35 @@ Salida: `hubo-cambios`, `"true"` si alguna captura o BOM cambió.
 - **Hojas jerárquicas**: la captura del esquemático es la de la hoja raíz. La BOM sí incluye todas las hojas, porque kicad-cli aplana la jerarquía.
 - **GitHub Pages**: los commits que hace la acción con el `GITHUB_TOKEN` no disparan el evento `push` de otros workflows. Si el sitio se despliega con un workflow propio, hay que dispararlo también con `workflow_run` al terminar este, o desplegar en el mismo workflow después de la acción.
 - **Pull requests**: en un pull request no se hace commit (HEAD no está en una rama). Se puede usar `hacer-commit: "false"` y revisar la salida `hubo-cambios`.
+
+## Fuentes privadas
+
+La imagen de Docker de KiCad solo trae fuentes genéricas: si un texto usa una fuente que no está instalada, KiCad la reemplaza sin avisar. Para usar una fuente que no puede quedar pública en el repositorio, se guarda en un secreto y se escribe en una carpeta fuera del repositorio antes de la acción:
+
+1. Guardar la fuente en base64 como secreto del repositorio (Settings → Secrets and variables → Actions), por ejemplo con `gh`:
+
+   ```bash
+   base64 -i MiFuente.otf | gh secret set FUENTE_MIFUENTE -R usuario/repositorio
+   ```
+
+   Un secreto puede pesar hasta 48 KB, o sea una fuente de unos 36 KB.
+
+2. En el workflow:
+
+   ```yaml
+   - name: Instalar fuentes privadas
+     env:
+       FUENTE_MIFUENTE: ${{ secrets.FUENTE_MIFUENTE }}
+     run: |
+       mkdir -p "$RUNNER_TEMP/fuentes"
+       printf '%s' "$FUENTE_MIFUENTE" | base64 --decode > "$RUNNER_TEMP/fuentes/MiFuente.otf"
+
+   - uses: piruetasxyz/kicad-retrata@v0
+     with:
+       carpeta-fuentes: ${{ runner.temp }}/fuentes
+   ```
+
+Los SVG generados llevan los contornos de las letras usadas (igual que el `render_cache` del `.kicad_pcb`), pero no el archivo de la fuente.
 
 ## Uso local
 
