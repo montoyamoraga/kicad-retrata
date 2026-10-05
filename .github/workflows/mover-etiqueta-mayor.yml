@@ -1,0 +1,37 @@
+name: Mover etiqueta mayor
+
+# Al publicar una versión (por ejemplo v0.0.4), mueve la etiqueta mayor (v0)
+# a ese commit, así los repositorios que usan @v0 reciben la versión nueva sin
+# tener que mover la etiqueta a mano.
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  mover:
+    if: github.repository == 'piruetasxyz/kicad-retrata' && !github.event.release.prerelease
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar la versión publicada
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Mover la etiqueta mayor
+        env:
+          ETIQUETA: ${{ github.event.release.tag_name }}
+        run: |
+          set -eu
+          # Solo versiones con forma vX.Y.Z; cualquier otra etiqueta se ignora.
+          if ! [[ "$ETIQUETA" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::warning::$ETIQUETA no tiene la forma vX.Y.Z, no se mueve ninguna etiqueta."
+            exit 0
+          fi
+          MAYOR="${ETIQUETA%%.*}"
+          git tag -f "$MAYOR" HEAD
+          git push -f origin "refs/tags/$MAYOR"
+          echo "$MAYOR ahora apunta a $ETIQUETA ($(git rev-parse --short HEAD))."

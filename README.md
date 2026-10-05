@@ -106,16 +106,15 @@ Ojo: las capturas generadas localmente pueden diferir un poco de las de GitHub A
 
 Se usa [versionado semántico](https://semver.org/lang/es/). Cada versión tiene su etiqueta (`v0.0.1`) y la etiqueta mayor (`v0`) se mueve a la última versión de esa serie, así los repositorios que usan `@v0` reciben los arreglos sin cambiar su workflow.
 
-Las etiquetas van en `piruetasxyz/kicad-retrata`, que es de donde los workflows usan la acción. En un clon de un fork, ese repositorio es el remoto `upstream` (`origin` es el fork), y la etiqueta se pone sobre `upstream/main`, después de mergear el pull request:
+Para publicar una versión, después de mergear los pull requests, se crea la versión en GitHub con las notas generadas a partir de los pull requests:
 
 ```bash
-git fetch upstream --tags
-git tag -a v0.0.3 -m "v0.0.3" upstream/main
-git tag -f v0 v0.0.3
-git push upstream v0.0.3
-git push -f upstream v0
-gh release create v0.0.3 -R piruetasxyz/kicad-retrata --verify-tag --title v0.0.3 --notes "..."
+gh release create v0.0.4 -R piruetasxyz/kicad-retrata --target main --generate-notes
 ```
+
+(o en la web: Releases → Draft a new release → etiqueta nueva → "Generate release notes").
+
+El workflow [mover-etiqueta-mayor.yml](./.github/workflows/mover-etiqueta-mayor.yml) mueve entonces la etiqueta mayor (`v0`) a la versión nueva. Las versiones marcadas como pre-release no la mueven.
 
 ## Licencia
 
